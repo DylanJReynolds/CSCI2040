@@ -37,4 +37,13 @@ public class CatalogueTestSuite {
         //catalogueUITest.testRemoveEntry();
         //catalogueUITest.testSpecificSearch();
     }
+
+    @Test
+    public void testLogin() {
+        LoginTest loginTest = new LoginTest();
+        loginTest.setUp();
+        loginTest.testAdminLogin();
+        loginTest.testUserLogin();
+        loginTest.testInvalidLogin();
+    }
 }
