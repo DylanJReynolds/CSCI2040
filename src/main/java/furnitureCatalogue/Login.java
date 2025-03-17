@@ -1,7 +1,16 @@
+/*
+ * This class is responsible for authenticating users based on a hardcoded list of users and roles to interact with the catalogue.
+ * It reads the username and password from the console and checks if they match any of the users in the list, then is sent
+ * to the CatalogueUI class to determine what actions the user can take.
+ */
+
 package furnitureCatalogue;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+
 import java.io.*;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -10,12 +19,9 @@ import java.security.spec.KeySpec;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Scanner;
+import java.awt.Component;
 
-/*
- * This class is responsible for authenticating users based on a hardcoded list of users and roles to interact with the catalogue.
- * It reads the username and password from the console and checks if they match any of the users in the list, then is sent
- * to the CatalogueUI class to determine what actions the user can take.
- */
+
 public class Login {
     protected HashMap<String, String> users;
     protected final HashMap<String, String> roles;
@@ -65,7 +71,7 @@ public class Login {
 
     //This function encrypts the string, so that passwords remain protected.
     //The raw password is never used, instead the encrypted ones are compared.
-    private String hashString(String input) {
+    public String hashString(String input) {
         try {
             String password = input;
             byte[] salt = new byte[16];
@@ -101,9 +107,68 @@ public class Login {
         }
     }
 
-    public void makeUser() {
-        writeCSV("src/main/resources/Users.csv");
+    public void makeUserSwing(Component parent) {
+    // 1) Get username via dialog
+    String username = JOptionPane.showInputDialog(parent, "Enter new username:");
+    if (username == null || username.isEmpty()) {
+        System.out.println("Cancelled or blank. Aborting user creation.");
+        return;
     }
+    // Check for duplicates
+    if (users.containsKey(username)) {
+        JOptionPane.showMessageDialog(parent, 
+            "That username already exists!", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // 2) Get password
+    JPasswordField pwdField = new JPasswordField(10);
+    int result = JOptionPane.showConfirmDialog(
+        parent, pwdField, "Enter Password", JOptionPane.OK_CANCEL_OPTION);
+    if (result != JOptionPane.OK_OPTION) {
+        System.out.println("Cancelled. Aborting user creation.");
+        return;
+    }
+    String rawPassword = new String(pwdField.getPassword());
+    String hashed = hashString(rawPassword);
+
+    // 3) Ask if admin or normal
+    String[] options = {"Admin", "User"};
+    int choice = JOptionPane.showOptionDialog(
+        parent,
+        "Is this user an admin?",
+        "User Type",
+        JOptionPane.DEFAULT_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
+        null,
+        options,
+        options[0]
+    );
+    // Map 0 -> admin, 1 -> user
+    String adminFlag = (choice == 0) ? "1" : "0";
+
+    // 4) Write to CSV
+    try (FileWriter fw = new FileWriter("src/main/resources/Users.csv", true)) {
+        fw.write("\n" + username + "," + hashed + "," + adminFlag);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    // 5) Update your in-memory `users` and `roles` maps
+    users.put(username, hashed);
+    if (adminFlag.equals("1")) {
+        roles.put(username, "admin");
+    } else {
+        roles.put(username, "user");
+    }
+
+    JOptionPane.showMessageDialog(parent, 
+        "Created user: " + username,
+        "Success",
+        JOptionPane.INFORMATION_MESSAGE);
+}
 
     private void writeCSV(String fileName) {
         //Check for duplicate users:

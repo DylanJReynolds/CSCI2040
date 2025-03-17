@@ -1,3 +1,8 @@
+/*
+ * This class is responsible for searching the catalogue for furniture items based on user input.
+ * It provides methods to search for items based on a query, sort the results, and filter the results.
+ */
+
 package furnitureCatalogue.SearchPackage;
 
 import java.util.HashMap;

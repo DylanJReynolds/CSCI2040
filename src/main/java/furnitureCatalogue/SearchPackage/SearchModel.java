@@ -1,3 +1,8 @@
+/*
+ * This class is the model for the search functionality of the application.
+ * It is responsible for querying the database and returning the results to the controller.
+ */
+
 package furnitureCatalogue.SearchPackage;
 
 import java.net.URL;

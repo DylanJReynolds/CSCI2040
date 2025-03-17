@@ -1,3 +1,10 @@
+/*
+ * This file contains JUnit test cases for the CatalogueFileIO class.
+ * The CatalogueFileIO class is responsible for reading and writing to a CSV file that stores the catalogue data.
+ * 
+ * DJ: I have removed all mentions of the previous console-based login system and replaced it with the correct UI-based login system.
+ */
+
 package furnitureCatalogue;
 
 import org.junit.jupiter.api.*;
@@ -23,16 +30,11 @@ public class CatalogueFileIOTest {
         tempCsvFile = File.createTempFile("Sample", ".csv");
         Files.copy(originalFile.toPath(), tempCsvFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-        // Create a test UI that bypasses the interactive menu
+        // Create a test UI that bypasses the interactive menu and login
         ui = new CatalogueUI() {
             @Override
-            public void commandLineMenu() {
-                // No Testing.
-            }
-
-            @Override
-            public boolean inputLogin() {
-                role = "admin";
+            protected boolean inputLogin() {
+                this.role = "admin";
                 return false;
             }
         };
@@ -120,11 +122,10 @@ public class CatalogueFileIOTest {
         assertEquals("100,Black Leather Sofa,500,Sofa,Black,Leather,Large,50,IKEA,Modern,300", results.get(0),
                 "The most relevant item should be first in the results.");
 
-        // Ensure another leather-related result appears before unrelated items
+        // Ensure another leather-related result appears
         assertTrue(results.contains("102,Red Leather Chair,200,Chair,Red,Leather,Small,20,Wayfair,Classic,150"),
                 "A relevant leather-related item should appear in the results.");
     }
-
 
     // Helper method: search for a line by the given ID in the temporary CSV file.
     private String searchCSV(String searchId) throws IOException {
