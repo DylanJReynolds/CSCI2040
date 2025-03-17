@@ -22,14 +22,13 @@ public class CatalogueFileIO {
     public void loadFile() {
         try {
             // Use class loader to get file from resources
-            URL resource = getClass().getClassLoader().getResource(fileName);
-            if (resource == null) {
+            InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(fileName);
+            if (resourceStream == null) {
                 throw new FileNotFoundException("File not found: " + fileName);
             }
-            csvFile = new File(resource.toURI());  // Convert URL to File using URI
-
+    
             // Proceed as usual
-            Scanner fileScanner = new Scanner(csvFile);
+            Scanner fileScanner = new Scanner(resourceStream);
             this.UI.headers = fileScanner.nextLine().split(","); // Get headers from first line of CSV
             this.UI.catalogue = new HashMap<>(); // Initialize blank hash map
             // load each entry from CSV file into hash map
@@ -48,7 +47,7 @@ public class CatalogueFileIO {
                 }
                 UI.maxLengths[i - 1] = maxLength;
             }
-        } catch (FileNotFoundException | URISyntaxException e) {
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

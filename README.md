@@ -24,6 +24,8 @@ You will need the following to be able to run and compile this program:
 2. Use `git clone https://github.com/DylanJReynolds/CSCI2040` to clone the repository into your desired folder. You should have the file in your folder.
 4. Click on `Build-Script.bat` to build a jar file of the directory that can be executed.
 
+Alternatively, run: `mvn package -DskipTests`, then `java -jar target/CSCI2040-1.0-SNAPSHOT.jar`
+
 ## How to use:
 
 Each piece of furniture is represented using an identification number and has various parameters. These parameters are as follows:
