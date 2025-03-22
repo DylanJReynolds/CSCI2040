@@ -17,9 +17,15 @@ public class CatalogueUI {
     private SearchView v; // Pointer to SearchView object.
     private Login login;
 
-    public CatalogueUI() {
-        if (inputLogin()) return;
-        fileIO = new CatalogueFileIO("Sample.csv", this);
+    public CatalogueUI(String config) {
+        if (inputLogin(config)) return;
+
+        if (config.equals("1")) {
+            fileIO = new CatalogueFileIO("classes/Sample.csv", this);
+        } else{
+            fileIO = new CatalogueFileIO("Sample.csv", this);
+        }
+
         c = SearchController.getInstance();
         v = SearchView.getInstance();
 //        c.searchQuery();
@@ -27,11 +33,17 @@ public class CatalogueUI {
     }
 
     public static void main(String[] args) {
-        CatalogueUI catalogueUI = new CatalogueUI();
+        if (args.length > 0){
+            CatalogueUI catalogueUI = new CatalogueUI(args[0]);
+        } else{
+            CatalogueUI catalogueUI = new CatalogueUI("");
+        }
+
+
     }
 
-    protected boolean inputLogin() {
-        login = new Login();
+    protected boolean inputLogin(String config) {
+        login = new Login(config);
         role = login.authenticate();
         if (role == null) {
             System.out.println("Exiting...");
@@ -46,6 +58,7 @@ public class CatalogueUI {
      */
     protected void commandLineMenu() {
         s = new Scanner(System.in);
+        s.useDelimiter("\n");
         boolean running = true;
         // prints the menu options based on the role of the user
         while (running) {

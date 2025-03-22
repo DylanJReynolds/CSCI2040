@@ -21,7 +21,7 @@ public class Login {
     protected final HashMap<String, String> roles;
     protected Scanner scanner;
 
-    public Login() {
+    public Login(String config) {
         users = new HashMap<>();
         roles = new HashMap<>();
         scanner = new Scanner(System.in);
@@ -31,8 +31,12 @@ public class Login {
         * User: user123
         * Admin: admin123
         * */
+        if (config.equals("1")){
+            readCSV("classes/Users.csv");
+        } else{
+            readCSV("src/main/resources/Users.csv");
+        }
 
-        readCSV("src/main/resources/Users.csv");
     }
 
     // Authenticates the user based on the provided username and password
@@ -119,7 +123,8 @@ public class Login {
             }
         }
         System.out.println("Enter the Password: ");
-        String password = hashString(scanner.nextLine());
+        String password = scanner.nextLine();
+        password = hashString(password);
         boolean adminLoop = true;
         String admin = "";
         while (adminLoop){
