@@ -21,9 +21,9 @@ public class CatalogueUI {
         if (inputLogin(config)) return;
 
         if (config.equals("1")) {
-            fileIO = new CatalogueFileIO("classes/Sample.csv", this);
+            fileIO = new CatalogueFileIO("classes/Sample.csv", this, "1");
         } else{
-            fileIO = new CatalogueFileIO("Sample.csv", this);
+            fileIO = new CatalogueFileIO("Sample.csv", this, "");
         }
 
         c = SearchController.getInstance();
@@ -58,7 +58,6 @@ public class CatalogueUI {
      */
     protected void commandLineMenu() {
         s = new Scanner(System.in);
-        s.useDelimiter("\n");
         boolean running = true;
         // prints the menu options based on the role of the user
         while (running) {

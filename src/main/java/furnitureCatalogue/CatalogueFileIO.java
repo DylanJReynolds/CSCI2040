@@ -9,10 +9,12 @@ public class CatalogueFileIO {
     private String fileName;
     public CatalogueUI UI;
     private File csvFile;
+    private final String mode;
 
-    public CatalogueFileIO(String fileName, CatalogueUI catalogueUI) {
+    public CatalogueFileIO(String fileName, CatalogueUI catalogueUI, String mode) {
         this.UI = catalogueUI;
         this.fileName = fileName;
+        this.mode = mode;
         this.loadFile();
     }
 
@@ -22,11 +24,17 @@ public class CatalogueFileIO {
     public void loadFile() {
         try {
             // Use class loader to get file from resources
-            URL resource = getClass().getClassLoader().getResource(fileName);
-            if (resource == null) {
-                throw new FileNotFoundException("File not found: " + fileName);
+            if (!mode.equals("1")){
+                URL resource = getClass().getClassLoader().getResource(fileName);
+
+                if (resource == null) {
+                    throw new FileNotFoundException("File not found: " + fileName);
+                }
+                csvFile = new File(resource.toURI());  // Convert URL to File using URI
+            } else{
+                csvFile = new File(fileName);
             }
-            csvFile = new File(resource.toURI());  // Convert URL to File using URI
+
 
             // Proceed as usual
             Scanner fileScanner = new Scanner(csvFile);
