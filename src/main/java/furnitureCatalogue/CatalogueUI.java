@@ -622,10 +622,13 @@ public class CatalogueUI extends JFrame {
         Integer key = entry.getKey();
         ArrayList<String> row = entry.getValue();
         StringBuilder sb = new StringBuilder(key + "\t");
-        for (int i = 0; i < row.size(); i++) {
-            sb.append(row.get(i));
-            for (int j = 0; j <= Math.ceil((double)(maxLengths[i]) / 8.0)
-                    - Math.floor((double)(row.get(i).length()) / 8.0); j++) {
+    
+        // Ensure the row has the correct number of columns
+        for (int i = 0; i < headers.length - 1; i++) {
+            String value = (i < row.size()) ? row.get(i) : ""; // Use empty string if index is out of bounds
+            sb.append(value);
+            for (int j = 0; j <= Math.ceil((double) (maxLengths[i]) / 8.0)
+                    - Math.floor((double) (value.length()) / 8.0); j++) {
                 sb.append("\t");
             }
         }
