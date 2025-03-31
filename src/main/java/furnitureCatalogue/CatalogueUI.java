@@ -623,7 +623,6 @@ public class CatalogueUI extends JFrame {
         ArrayList<String> row = entry.getValue();
         StringBuilder sb = new StringBuilder(key + "\t");
     
-        // Ensure the row has the correct number of columns
         for (int i = 0; i < headers.length - 1; i++) {
             String value = (i < row.size()) ? row.get(i) : ""; // Use empty string if index is out of bounds
             sb.append(value);

@@ -63,3 +63,8 @@ For a regular user, the program looks like this:
 4. Exit (Terminates the program, saving any changes).
 
 Please note that terminating the program in other ways (i.e. shutting it down via task manager) will still keep the changes made to the database made prior.
+
+---
+
+## Documentation: 
+See our [Hashnode](https://nanonest.hashnode.space) for detailed documentation and planning.
